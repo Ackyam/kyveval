@@ -256,15 +256,11 @@ sed -i.bak -e "s/^snapshot-interval *=.*/snapshot-interval = \"$snapshot_interva
 #=======telechargement du snapshot===
 if [[ -n $LINK_SNAPSHOT ]]
 then
-	#cd /root/$folder/
-	#wget -O snap.tar $LINK_SNAPSHOT
-	#tar xvf snap.tar 
-	#rm snap.tar
-	mkdir /github
-	cd /github
-	git clone $gitsnap
-	cp -r snapshots /root/$folder/data/
-	
+	cd /root/$folder/
+	wget -O snap.tar $LINK_SNAPSHOT
+	tar xvf snap.tar 
+	rm snap.tar
+		
 	echo ===============================================
 	echo ============ Snapshot loaded! =================
 	echo ===============================================
@@ -276,11 +272,16 @@ source $HOME/.bashrc
 if [[ -n $SNAP_RPC ]]
 then
 
-LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
-BLOCK_HEIGHT=$((LATEST_HEIGHT - 10000)); \
-TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
+#LATEST_HEIGHT=$(curl -s $SNAP_RPC/block | jq -r .result.block.header.height); \
+#BLOCK_HEIGHT=$((LATEST_HEIGHT - 10000)); \
+#TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
 
-echo $LATEST_HEIGHT $BLOCK_HEIGHT $TRUST_HASH
+BLOCK_HEIGHT=$(curl -s $SNAP_RPC/commit | jq -r .result.signed_header.header.height); \
+TRUST_HASH=$(curl -s "$SNAP_RPC/commit" | jq -r .result.signed_header.commit.block_id.hash)
+
+echo Block: $BLOCK_HEIGHT 
+echo Trust: $TRUST_HASH
+sleep 30
 
 sed -i.bak -E "s|^(enable[[:space:]]+=[[:space:]]+).*$|\1true| ; \
 s|^(rpc_servers[[:space:]]+=[[:space:]]+).*$|\1\"$SNAP_RPC,$SNAP_RPC\"| ; \
