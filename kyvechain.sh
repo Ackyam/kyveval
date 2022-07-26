@@ -263,7 +263,7 @@ then
 	mkdir /github
 	cd /github
 	git clone $gitsnap
-	cp -r snapshots /root/$folder/data/
+	cp -r Kyve_snap/snapshots /root/$folder/data/
 	
 	echo ===============================================
 	echo ============ Snapshot loaded! =================
