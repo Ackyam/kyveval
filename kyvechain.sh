@@ -34,12 +34,12 @@ SYNH(){
 		echo $synh
 		source $HOME/.bashrc
 	fi
-	echo ===Your address ====
+	echo =============== Your address ================
 	echo $address
-	echo ==========================
-	echo =====Your valoper=====
+	echo =============================================
+	echo =============== Your valoper =====================
 	echo $valoper
-	echo ===========================
+	echo ==================================================
 	date
 	source $HOME/.bashrc
 }
@@ -69,7 +69,7 @@ do
 	echo ===Your reward $reward $denom===
 	echo ==============================
 	sleep 5
-		if [[ `echo $reward` -gt 1000000 ]]
+		if [[ `echo $reward` -gt 100000000 ]]
 	then
 		echo =============================================================
 		echo ============Rewards discovered, collecting...================
@@ -92,12 +92,12 @@ do
 		echo = Your balance $balance =
 		echo =========================
 		sleep 5
-		if [[ `echo $balance` -gt 1000000 ]]
+		if [[ `echo $balance` -gt 1000000000 ]]
 		then
 			echo ======================================================================
 			echo ============Balance = $balance . Delegate to validator================
 			echo ======================================================================
-			stake=$(($balance-500000))
+			stake=50000000
 			(echo ${PASSWALLET}) | $binary tx staking delegate $valoper ${stake}`echo $denom` --from $address --chain-id $chain --gas="auto" --fees 5555$denom -y
 			sleep 5
 			stake=0
@@ -111,7 +111,7 @@ do
 	#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	synh=`curl -s localhost:26657/status | jq .result.sync_info.catching_up`
-
+	
 	#---- test modif des paramètre pour résoudre les problème de jail intempestif ----#
 	#---- Retrait des seeds et persistent_peers, sync à false  ---#
 	STATESYNC=`grep ^enable $HOME/$folder/config/config.toml | awk '{printf $3}'`
@@ -129,7 +129,7 @@ do
 		
 		SYNH
 	fi
-
+	
 	#----------------------------------------------------
 	jailed=`$binary query staking validator $valoper -o json | jq -r .jailed`
 	while [[  $jailed == true ]] 
@@ -196,12 +196,12 @@ sleep 10
 (echo "${MNEMONIC}"; echo ${PASSWALLET}; echo ${PASSWALLET}) | $binary keys add ${WALLET_NAME} --recover
 address=`(echo ${PASSWALLET}) | $(which $binary) keys show $WALLET_NAME -a`
 valoper=`(echo ${PASSWALLET}) | $(which $binary) keys show $WALLET_NAME  --bech val -a`
-echo ===Your address ====
+echo =============== Your address ================
 echo $address
-echo ==========================
-echo =====Your valoper=====
+echo =============================================
+echo =============== Your valoper =====================
 echo $valoper
-echo ===========================
+echo ==================================================
 #==================================
 
 wget -O $HOME/$folder/config/genesis.json $genesis
