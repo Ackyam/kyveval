@@ -111,7 +111,25 @@ do
 	#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 	synh=`curl -s localhost:26657/status | jq .result.sync_info.catching_up`
-	
+
+	#---- test modif des paramètre pour résoudre les problème de jail intempestif ----#
+	#---- Retrait des seeds et persistent_peers, sync à false  ---#
+	STATESYNC=`grep ^enable $HOME/$folder/config/config.toml | awk '{printf $3}'`
+		
+	if [[ $synh == false && $STATESYNC == true ]]
+	then
+		sed -i -e 's/^enable *=.* /enable = false/g' $HOME/$folder/config/config.toml
+		sed -i -e 's/^seeds *=.*/seeds = ""/g'  $HOME/$folder/config/config.toml
+		sed -i -e 's/^persistent_peers =.*/persistent_peers = ""/g' $HOME/$folder/config/config.toml
+		sleep 5
+		
+		STATESYNC=0
+		kill $nodepid
+		sleep 5
+		
+		SYNH
+	fi
+
 	#----------------------------------------------------
 	jailed=`$binary query staking validator $valoper -o json | jq -r .jailed`
 	while [[  $jailed == true ]] 
