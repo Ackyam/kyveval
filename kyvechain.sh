@@ -294,7 +294,7 @@ then
 #BLOCK_HEIGHT=$((LATEST_HEIGHT - 10000)); \
 #TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
 
-BLOCK_HEIGHT=$(curl -s "$SNAP_RPC/block" | jq -r .result.block.header.height; \
+BLOCK_HEIGHT=$(curl -s "$SNAP_RPC/block" | jq -r .result.block.header.height); \
 TRUST_HASH=$(curl -s "$SNAP_RPC/block" | jq -r .result.block_id.hash)
 
 echo Block: $BLOCK_HEIGHT 
