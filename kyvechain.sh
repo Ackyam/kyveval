@@ -69,7 +69,7 @@ do
 	echo ===Your reward $reward $denom===
 	echo ==============================
 	sleep 5
-		if [[ `echo $reward` -gt 100000000 ]]
+	if [[ `echo $reward` -gt 100000000 ]]
 	then
 		echo =============================================================
 		echo ============Rewards discovered, collecting...================
@@ -125,9 +125,9 @@ do
 		
 		STATESYNC=0
 		kill $nodepid
-		sleep 5
-		
-		SYNH
+		sleep 3
+
+		nohup  $binary start   > /dev/null 2>&1 & nodepid=`echo $!`
 	fi
 	
 	#----------------------------------------------------
@@ -294,8 +294,8 @@ then
 #BLOCK_HEIGHT=$((LATEST_HEIGHT - 10000)); \
 #TRUST_HASH=$(curl -s "$SNAP_RPC/block?height=$BLOCK_HEIGHT" | jq -r .result.block_id.hash)
 
-BLOCK_HEIGHT=$(curl -s $SNAP_RPC/commit | jq -r .result.signed_header.header.height); \
-TRUST_HASH=$(curl -s "$SNAP_RPC/commit" | jq -r .result.signed_header.commit.block_id.hash)
+BLOCK_HEIGHT=$(curl -s "$SNAP_RPC/block" | jq -r .result.signed_header.header.height); \
+TRUST_HASH=$(curl -s "$SNAP_RPC/block" | jq -r .result.signed_header.commit.block_id.hash)
 
 echo Block: $BLOCK_HEIGHT 
 echo Trust: $TRUST_HASH
